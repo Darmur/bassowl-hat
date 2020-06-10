@@ -200,8 +200,8 @@ bus.write_byte_data(0x4c, 0x7f, 0x00) # Book 0x00
 bus.write_byte_data(0x4c, 0x78, 0x80) # Clear analog fault
 
 EOF
-chmod a+x /usr/bin/tas5825m_init.py
 
+chmod a+x /usr/bin/tas5825m_init.py
 
 # tas5825m init service
 cat <<'EOF' > /etc/systemd/system/tas5825m.service
@@ -222,6 +222,6 @@ systemctl daemon-reload
 systemctl enable tas5825m.service
 systemctl start tas5825m.service
 
-echo "INSTALL ALSA SETTINGS FOR TAS5825M AND TAS5825M INITIALIZATION SCRIPT DONE!"
+echo "INSTALL TAS5825M INITIALIZATION SCRIPT DONE!"
 echo "SELECT 'Generic I2S DAC' IN VOLUMIO PLAYBACK SETTINGS AND ENABLE SOFTWARE MIXER FOR VOLUME CONTROL"
 echo "PLEASE REBOOT."
