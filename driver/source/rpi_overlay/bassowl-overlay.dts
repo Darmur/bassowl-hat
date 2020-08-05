@@ -1,0 +1,55 @@
+// Definitions for BassOwl-HAT
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&i2s>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            clock-frequency = <400000>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            codec: tas5825m@4c {
+                #sound-dai-cells = <0>;
+                compatible = "ti,tas5825m";
+                reg = <0x4c>;
+            };
+        };
+    };
+
+    fragment@2 {
+        target = <&sound>;
+        __overlay__ {
+            status = "okay";
+            compatible = "simple-audio-card";
+            label = "bassowl";
+            simple-audio-card,dai-link {
+                /* DAC */
+                format = "i2s";
+                bitclock-master = <&dailink_master>;
+                frame-master = <&dailink_master>;
+                dailink_master: cpu {
+                        sound-dai = <&i2s>;
+                        dai-tdm-slot-num = <2>;
+                        dai-tdm-slot-width = <32>;
+                };
+            codec {
+                    sound-dai = <&codec>;
+            };
+            
+        };
+    };
+
+  };
+};
