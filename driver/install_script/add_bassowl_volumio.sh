@@ -2,8 +2,8 @@
 
 BASSOWL_STRING='    {"id":"bassowl","name":"BassOwl-HAT","overlay":"bassowl","alsanum":"2","mixer":"Master","modules":"","script":"","needsreboot":"yes"},'
 
-mkdir ~/.bassowl/
-cp ~/.bassowl/dacs.json.orig /volumio/app/plugins/system_controller/i2s_dacs/dacs.json 
+mkdir -p ~/.bassowl/
+[[ -e ~/.bassowl/dacs.json.orig ]] && cp ~/.bassowl/dacs.json.orig /volumio/app/plugins/system_controller/i2s_dacs/dacs.json
 cp /volumio/app/plugins/system_controller/i2s_dacs/dacs.json ~/.bassowl/dacs.json.orig
 
 head -n 11 ~/.bassowl/dacs.json.orig > ~/.bassowl/temp.txt
