@@ -1,1 +1,1 @@
-934601a4d85c80222bf92158eb6bac12  modules-rpi-5.4.59-bassowl.tar.gz
+dec7dedeeddfef6d1bf29bd695de64c5  modules-rpi-5.4.59-bassowl.tar.gz
