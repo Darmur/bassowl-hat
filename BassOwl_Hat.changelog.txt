@@ -1,0 +1,12 @@
+Rev 1.0
+- First release
+
+Rev 1.1
+- Fixed output filter capacitors value (from 680nF to 1nF)
+- Changed footprint of output filter components
+- Changed feedback resistor for 5V DC DC converter, for achieving 5.1V output
+- Added test point for external Vin
+
+Rev 1.2
+- Added 26.8V Zener diode as additional protection for voltage spikes
+- Replaced 3 MLCC decoupling capacitors 22uF with 1 Electrolitic decoupling capacitor 100uF
