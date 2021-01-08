@@ -1,8 +1,8 @@
 diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
-index fa6db6eed..c405cb303 100644
+index 873e15d1d..cb3f980a0 100644
 --- a/arch/arm/boot/dts/overlays/Makefile
 +++ b/arch/arm/boot/dts/overlays/Makefile
-@@ -27,6 +27,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+@@ -29,6 +29,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
  	audioinjector-wm8731-audio.dtbo \
  	audiosense-pi.dtbo \
  	audremap.dtbo \
@@ -11,11 +11,11 @@ index fa6db6eed..c405cb303 100644
  	cma.dtbo \
  	dht11.dtbo \
 diff --git a/arch/arm/boot/dts/overlays/bassowl-overlay.dts b/arch/arm/boot/dts/overlays/bassowl-overlay.dts
-new file mode 100644
-index 000000000..c793cee56
+new file mode 100755
+index 000000000..74049b973
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/bassowl-overlay.dts
-@@ -0,0 +1,55 @@
+@@ -0,0 +1,53 @@
 +// Definitions for BassOwl-HAT
 +/dts-v1/;
 +/plugin/;
@@ -65,17 +65,15 @@ index 000000000..c793cee56
 +            codec {
 +                    sound-dai = <&codec>;
 +            };
-+            
 +        };
 +    };
-+
 +  };
 +};
 diff --git a/arch/arm/configs/bcm2709_defconfig b/arch/arm/configs/bcm2709_defconfig
-index 77feb47ce..e0739054c 100644
+index 4f2a92e4a..66074f70a 100644
 --- a/arch/arm/configs/bcm2709_defconfig
 +++ b/arch/arm/configs/bcm2709_defconfig
-@@ -1006,6 +1006,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -1004,6 +1004,7 @@ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
  CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
@@ -84,10 +82,10 @@ index 77feb47ce..e0739054c 100644
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/arch/arm/configs/bcm2711_defconfig b/arch/arm/configs/bcm2711_defconfig
-index 95934186b..6f5845738 100644
+index 113e10dcf..d5076820c 100644
 --- a/arch/arm/configs/bcm2711_defconfig
 +++ b/arch/arm/configs/bcm2711_defconfig
-@@ -1022,6 +1022,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -1015,6 +1015,7 @@ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
  CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
@@ -96,10 +94,10 @@ index 95934186b..6f5845738 100644
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/arch/arm/configs/bcmrpi_defconfig b/arch/arm/configs/bcmrpi_defconfig
-index bf6e9ba08..6f8df4e48 100644
+index cb8b5cc57..318b816b8 100644
 --- a/arch/arm/configs/bcmrpi_defconfig
 +++ b/arch/arm/configs/bcmrpi_defconfig
-@@ -994,6 +994,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -996,6 +996,7 @@ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
  CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
@@ -108,18 +106,18 @@ index bf6e9ba08..6f8df4e48 100644
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index c4160609a..4ba502894 100644
+index e9be75318..95b3dc6f1 100644
 --- a/sound/soc/codecs/Kconfig
 +++ b/sound/soc/codecs/Kconfig
-@@ -185,6 +185,7 @@ config SND_SOC_ALL_CODECS
- 	select SND_SOC_TAS5086 if I2C
- 	select SND_SOC_TAS571X if I2C
- 	select SND_SOC_TAS5720 if I2C
-+	select SND_SOC_TAS5825M if I2C
- 	select SND_SOC_TAS6424 if I2C
- 	select SND_SOC_TDA7419 if I2C
- 	select SND_SOC_TFA9879 if I2C
-@@ -1137,6 +1138,13 @@ config SND_SOC_TAS5720
+@@ -203,6 +203,7 @@ config SND_SOC_ALL_CODECS
+ 	imply SND_SOC_TAS5086
+ 	imply SND_SOC_TAS571X
+ 	imply SND_SOC_TAS5720
++	imply SND_SOC_TAS5825M
+ 	imply SND_SOC_TAS6424
+ 	imply SND_SOC_TDA7419
+ 	imply SND_SOC_TFA9879
+@@ -1345,6 +1346,13 @@ config SND_SOC_TAS5720
  	  Enable support for Texas Instruments TAS5720L/M high-efficiency mono
  	  Class-D audio power amplifiers.
  
@@ -134,19 +132,19 @@ index c4160609a..4ba502894 100644
  	tristate "Texas Instruments TAS6424 Quad-Channel Audio amplifier"
  	depends on I2C
 diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index 02560ad53..28c2a7548 100644
+index 42dbabda8..360567ca2 100644
 --- a/sound/soc/codecs/Makefile
 +++ b/sound/soc/codecs/Makefile
-@@ -201,6 +201,7 @@ snd-soc-tas6424-objs := tas6424.o
- snd-soc-tda7419-objs := tda7419.o
+@@ -220,6 +220,7 @@ snd-soc-tda7419-objs := tda7419.o
+ snd-soc-tas2770-objs := tas2770.o
  snd-soc-tfa9879-objs := tfa9879.o
  snd-soc-tas5713-objs := tas5713.o
 +snd-soc-tas5825m-objs := tas5825m.o
  snd-soc-tlv320aic23-objs := tlv320aic23.o
  snd-soc-tlv320aic23-i2c-objs := tlv320aic23-i2c.o
  snd-soc-tlv320aic23-spi-objs := tlv320aic23-spi.o
-@@ -488,6 +489,7 @@ obj-$(CONFIG_SND_SOC_TAS6424)	+= snd-soc-tas6424.o
- obj-$(CONFIG_SND_SOC_TDA7419)	+= snd-soc-tda7419.o
+@@ -534,6 +535,7 @@ obj-$(CONFIG_SND_SOC_TDA7419)	+= snd-soc-tda7419.o
+ obj-$(CONFIG_SND_SOC_TAS2770) += snd-soc-tas2770.o
  obj-$(CONFIG_SND_SOC_TFA9879)	+= snd-soc-tfa9879.o
  obj-$(CONFIG_SND_SOC_TAS5713)	+= snd-soc-tas5713.o
 +obj-$(CONFIG_SND_SOC_TAS5825M)	+= snd-soc-tas5825m.o
@@ -154,27 +152,20 @@ index 02560ad53..28c2a7548 100644
  obj-$(CONFIG_SND_SOC_TLV320AIC23_I2C)	+= snd-soc-tlv320aic23-i2c.o
  obj-$(CONFIG_SND_SOC_TLV320AIC23_SPI)	+= snd-soc-tlv320aic23-spi.o
 diff --git a/sound/soc/codecs/tas5825m.c b/sound/soc/codecs/tas5825m.c
-new file mode 100644
-index 000000000..9c66ba35f
+new file mode 100755
+index 000000000..742f50b89
 --- /dev/null
 +++ b/sound/soc/codecs/tas5825m.c
-@@ -0,0 +1,478 @@
+@@ -0,0 +1,473 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Driver for the TAS5825M Audio Amplifier
 + *
 + * Author: Andy Liu <andy-liu@ti.com>
-+ * Update & Tuning: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
++ * Author: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
 + *
-+ * This program is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU General Public License
-+ * version 2 as published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope that it will be useful, but
-+ * WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * General Public License for more details.
 + */
-+ 
++
 +#include <linux/module.h>
 +#include <linux/moduleparam.h>
 +#include <linux/slab.h>
@@ -215,7 +206,7 @@ index 000000000..9c66ba35f
 +#define TAS5825M_BOOK_8C     (0x8c)
 +
 +#define TAS5825M_VOLUME_MAX  (110)
-+#define TAS5825M_VOLUME_MIN  (40)
++#define TAS5825M_VOLUME_MIN  (30)
 +
 +const uint32_t tas5825m_volume[] = {
 +    0x0000001B,    //0, -110dB
@@ -398,7 +389,7 @@ index 000000000..9c66ba35f
 +    uinfo->type   = SNDRV_CTL_ELEM_TYPE_INTEGER;
 +    uinfo->access = (SNDRV_CTL_ELEM_ACCESS_TLV_READ | SNDRV_CTL_ELEM_ACCESS_READWRITE);
 +    uinfo->count  = 1;
-+    
++
 +    uinfo->value.integer.min  = TAS5825M_VOLUME_MIN;
 +    uinfo->value.integer.max  = TAS5825M_VOLUME_MAX;
 +    uinfo->value.integer.step = 1;
@@ -410,11 +401,11 @@ index 000000000..9c66ba35f
 +{
 +    struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
 +    struct tas5825m_priv *tas5825m = snd_soc_component_get_drvdata(component);
-+        
-+    mutex_lock(&tas5825m->lock);    
++
++    mutex_lock(&tas5825m->lock);
 +    ucontrol->value.integer.value[0] = tas5825m->vol;
 +    mutex_unlock(&tas5825m->lock);
-+    
++
 +    return 0;
 +}
 +
@@ -423,12 +414,12 @@ index 000000000..9c66ba35f
 +   int index;
 +
 +   index = vol;
-+   
-+   if (index < TAS5825M_VOLUME_MIN) 
-+      index = TAS5825M_VOLUME_MIN;   
 +
-+   if (index > TAS5825M_VOLUME_MAX) 
-+      index = TAS5825M_VOLUME_MAX;  
++   if (index < TAS5825M_VOLUME_MIN)
++      index = TAS5825M_VOLUME_MIN;
++
++   if (index > TAS5825M_VOLUME_MAX)
++      index = TAS5825M_VOLUME_MAX;
 +
 +   return index;
 +}
@@ -442,14 +433,14 @@ index 000000000..9c66ba35f
 +    uint8_t byte2;
 +    uint8_t byte1;
 +
-+    index = get_volume_index(vol);  
++    index = get_volume_index(vol);
 +    volume_hex = tas5825m_volume[index];
 +
 +    byte4 = ((volume_hex >> 24) & 0xFF);
 +    byte3 = ((volume_hex >> 16) & 0xFF);
 +    byte2 = ((volume_hex >> 8)  & 0xFF);
 +    byte1 = ((volume_hex >> 0)  & 0xFF);
-+    
++
 +    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
 +    snd_soc_component_write(component, TAS5825M_REG_7F, TAS5825M_BOOK_8C);
 +    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_0B);
@@ -467,30 +458,30 @@ index 000000000..9c66ba35f
 +{
 +    struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
 +    struct tas5825m_priv *tas5825m = snd_soc_component_get_drvdata(component);
-+        
-+    mutex_lock(&tas5825m->lock);    
-+    
-+    tas5825m->vol = ucontrol->value.integer.value[0];   
++
++    mutex_lock(&tas5825m->lock);
++
++    tas5825m->vol = ucontrol->value.integer.value[0];
 +    tas5825m_set_volume(component, tas5825m->vol);
-+    
++
 +    mutex_unlock(&tas5825m->lock);
-+    
++
 +    return 0;
 +}
 +
-+static const struct snd_kcontrol_new tas5825m_vol_control = 
-+{   
-+    .iface = SNDRV_CTL_ELEM_IFACE_MIXER, 
-+    .name  = "Master Playback Volume", 
-+    .info  = tas5825m_vol_info, 
++static const struct snd_kcontrol_new tas5825m_vol_control =
++{
++    .iface = SNDRV_CTL_ELEM_IFACE_MIXER,
++    .name  = "Master Playback Volume",
++    .info  = tas5825m_vol_info,
 +    .get   = tas5825m_vol_locked_get,
-+    .put   = tas5825m_vol_locked_put, 
++    .put   = tas5825m_vol_locked_put,
 +};
 +
 +static int tas5825m_snd_probe(struct snd_soc_component *component)
 +{
 +    int ret;
-+        
++
 +    ret = snd_soc_add_component_controls(component, &tas5825m_vol_control, 1);
 +
 +    return ret;
@@ -500,26 +491,26 @@ index 000000000..9c66ba35f
 +    .probe = tas5825m_snd_probe,
 +};
 +
-+static int tas5825m_mute(struct snd_soc_dai *dai, int mute)
++static int tas5825m_mute_stream(struct snd_soc_dai *dai, int mute, int direction)
 +{
 +    u8 reg03_value = 0;
 +    u8 reg35_value = 0;
 +    struct snd_soc_component *component = dai->component;
-+    
++
 +    if (mute)
 +    {
 +        reg03_value = 0x0b;
-+        reg35_value = 0x00;  
++        reg35_value = 0x00;
 +    }
 +    else
 +    {
 +        reg03_value = 0x03;
-+        reg35_value = 0x11; 
-+    }   
-+    
++        reg35_value = 0x11;
++    }
++
 +    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
 +    snd_soc_component_write(component, TAS5825M_REG_7F, TAS5825M_BOOK_00);
-+    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);    
++    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
 +    snd_soc_component_write(component, TAS5825M_REG_03, reg03_value);
 +    snd_soc_component_write(component, TAS5825M_REG_35, reg35_value);
 +
@@ -527,7 +518,8 @@ index 000000000..9c66ba35f
 +}
 +
 +static const struct snd_soc_dai_ops tas5825m_dai_ops = {
-+    .digital_mute = tas5825m_mute,
++    .mute_stream = tas5825m_mute_stream,
++    .no_capture_mute = 1,
 +};
 +
 +static struct snd_soc_dai_driver tas5825m_dai = {
@@ -546,17 +538,17 @@ index 000000000..9c66ba35f
 +{
 +    struct tas5825m_priv *tas5825m;
 +    int ret;
-+    
++
 +    tas5825m = devm_kzalloc(dev, sizeof(struct tas5825m_priv), GFP_KERNEL);
 +    if (!tas5825m)
 +        return -ENOMEM;
-+    
++
 +    dev_set_drvdata(dev, tas5825m);
 +    tas5825m->regmap = regmap;
 +    tas5825m->vol    = 100;         //100, -10dB
-+    
++
 +    mutex_init(&tas5825m->lock);
-+        
++
 +    ret = regmap_register_patch(regmap, tas5825m_init_sequence, ARRAY_SIZE(tas5825m_init_sequence));
 +    if (ret != 0)
 +    {
@@ -565,28 +557,28 @@ index 000000000..9c66ba35f
 +
 +    }
 +
-+    ret = devm_snd_soc_register_component(dev, 
++    ret = devm_snd_soc_register_component(dev,
 +                                 &soc_component_tas5825m,
-+                                 &tas5825m_dai, 
++                                 &tas5825m_dai,
 +                                 1);
-+    if (ret != 0) 
++    if (ret != 0)
 +    {
 +        dev_err(dev, "Failed to register CODEC: %d\n", ret);
 +        goto err;
 +    }
 +
 +    return 0;
-+    
++
 +err:
 +    return ret;
 +
 +}
 +
 +static int tas5825m_i2c_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-+{   
++{
 +    struct regmap *regmap;
 +    struct regmap_config config = tas5825m_regmap;
-+    
++
 +    regmap = devm_regmap_init_i2c(i2c, &config);
 +    if (IS_ERR(regmap))
 +        return PTR_ERR(regmap);
@@ -595,16 +587,16 @@ index 000000000..9c66ba35f
 +}
 +
 +static int tas5825m_remove(struct device *dev)
-+{   
++{
 +    snd_soc_unregister_component(dev);
-+    
++
 +    return 0;
 +}
 +
 +static int tas5825m_i2c_remove(struct i2c_client *i2c)
-+{   
++{
 +    tas5825m_remove(&i2c->dev);
-+    
++
 +    return 0;
 +}
 +
@@ -634,32 +626,26 @@ index 000000000..9c66ba35f
 +
 +module_i2c_driver(tas5825m_i2c_driver);
 +
++MODULE_AUTHOR("Andy Liu <andy-liu@ti.com>");
 +MODULE_AUTHOR("Dario Murgia <dario.murgia@alumni.uniroma2.eu>");
 +MODULE_DESCRIPTION("TAS5825M Audio Amplifier Driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/codecs/tas5825m.h b/sound/soc/codecs/tas5825m.h
 new file mode 100755
-index 000000000..7abee1e23
+index 000000000..5bfd533f8
 --- /dev/null
 +++ b/sound/soc/codecs/tas5825m.h
-@@ -0,0 +1,1724 @@
+@@ -0,0 +1,1717 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Driver for the TAS5825M Audio Amplifier
 + *
 + * Author: Andy Liu <andy-liu@ti.com>
-+ * Update & Tuning: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
++ * Author: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
 + *
-+ * This program is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU General Public License
-+ * version 2 as published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope that it will be useful, but
-+ * WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * General Public License for more details.
 + */
-+ 
-+ #include <linux/regmap.h>
++
++#include <linux/regmap.h>
 +
 +static const struct reg_sequence tas5825m_init_sequence[] =
 +{
@@ -691,9 +677,9 @@ index 000000000..7abee1e23
 +//	{ 0x54, 0x05 }, // Analog gain -2.5dB (22.12 Vpeak)
 +//	{ 0x54, 0x06 }, // Analog gain -3.0dB (20.89 Vpeak)
 +//	{ 0x54, 0x07 }, // Analog gain -3.5dB (19.73 Vpeak)
-+//	{ 0x54, 0x08 }, // Analog gain -4.0dB (18.61 Vpeak)
++	{ 0x54, 0x08 }, // Analog gain -4.0dB (18.61 Vpeak)
 +//	{ 0x54, 0x09 }, // Analog gain -4.5dB (17.57 Vpeak)
-+	{ 0x54, 0x0a }, // Analog gain -5.0dB (16.59 Vpeak)
++//	{ 0x54, 0x0a }, // Analog gain -5.0dB (16.59 Vpeak)
 +//	{ 0x54, 0x0b }, // Analog gain -5.5dB (15.66 Vpeak)
 +//	{ 0x54, 0x0c }, // Analog gain -6.0dB (14.79 Vpeak)
 +//	{ 0x54, 0x0d }, // Analog gain -6.5dB (13.96 Vpeak)
@@ -2367,4 +2353,3 @@ index 000000000..7abee1e23
 +	{ 0x7f, 0x00 }, // Book 0x00
 +	{ 0x78, 0x80 }, // Clear analog fault
 +};
-\ No newline at end of file

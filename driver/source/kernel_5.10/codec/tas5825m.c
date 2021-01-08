@@ -1,19 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
 /*
  * Driver for the TAS5825M Audio Amplifier
  *
  * Author: Andy Liu <andy-liu@ti.com>
- * Update & Tuning: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
+ * Author: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
  */
- 
+
 #include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/slab.h>
@@ -54,7 +47,7 @@
 #define TAS5825M_BOOK_8C     (0x8c)
 
 #define TAS5825M_VOLUME_MAX  (110)
-#define TAS5825M_VOLUME_MIN  (40)
+#define TAS5825M_VOLUME_MIN  (30)
 
 const uint32_t tas5825m_volume[] = {
     0x0000001B,    //0, -110dB
@@ -237,7 +230,7 @@ static int tas5825m_vol_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_
     uinfo->type   = SNDRV_CTL_ELEM_TYPE_INTEGER;
     uinfo->access = (SNDRV_CTL_ELEM_ACCESS_TLV_READ | SNDRV_CTL_ELEM_ACCESS_READWRITE);
     uinfo->count  = 1;
-    
+
     uinfo->value.integer.min  = TAS5825M_VOLUME_MIN;
     uinfo->value.integer.max  = TAS5825M_VOLUME_MAX;
     uinfo->value.integer.step = 1;
@@ -249,11 +242,11 @@ static int tas5825m_vol_locked_get(struct snd_kcontrol *kcontrol, struct snd_ctl
 {
     struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
     struct tas5825m_priv *tas5825m = snd_soc_component_get_drvdata(component);
-        
-    mutex_lock(&tas5825m->lock);    
+
+    mutex_lock(&tas5825m->lock);
     ucontrol->value.integer.value[0] = tas5825m->vol;
     mutex_unlock(&tas5825m->lock);
-    
+
     return 0;
 }
 
@@ -262,12 +255,12 @@ static inline int get_volume_index(int vol)
    int index;
 
    index = vol;
-   
-   if (index < TAS5825M_VOLUME_MIN) 
-      index = TAS5825M_VOLUME_MIN;   
 
-   if (index > TAS5825M_VOLUME_MAX) 
-      index = TAS5825M_VOLUME_MAX;  
+   if (index < TAS5825M_VOLUME_MIN)
+      index = TAS5825M_VOLUME_MIN;
+
+   if (index > TAS5825M_VOLUME_MAX)
+      index = TAS5825M_VOLUME_MAX;
 
    return index;
 }
@@ -281,14 +274,14 @@ static void tas5825m_set_volume(struct snd_soc_component *component, int vol)
     uint8_t byte2;
     uint8_t byte1;
 
-    index = get_volume_index(vol);  
+    index = get_volume_index(vol);
     volume_hex = tas5825m_volume[index];
 
     byte4 = ((volume_hex >> 24) & 0xFF);
     byte3 = ((volume_hex >> 16) & 0xFF);
     byte2 = ((volume_hex >> 8)  & 0xFF);
     byte1 = ((volume_hex >> 0)  & 0xFF);
-    
+
     snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
     snd_soc_component_write(component, TAS5825M_REG_7F, TAS5825M_BOOK_8C);
     snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_0B);
@@ -306,30 +299,30 @@ static int tas5825m_vol_locked_put(struct snd_kcontrol *kcontrol, struct snd_ctl
 {
     struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
     struct tas5825m_priv *tas5825m = snd_soc_component_get_drvdata(component);
-        
-    mutex_lock(&tas5825m->lock);    
-    
-    tas5825m->vol = ucontrol->value.integer.value[0];   
+
+    mutex_lock(&tas5825m->lock);
+
+    tas5825m->vol = ucontrol->value.integer.value[0];
     tas5825m_set_volume(component, tas5825m->vol);
-    
+
     mutex_unlock(&tas5825m->lock);
-    
+
     return 0;
 }
 
-static const struct snd_kcontrol_new tas5825m_vol_control = 
-{   
-    .iface = SNDRV_CTL_ELEM_IFACE_MIXER, 
-    .name  = "Master Playback Volume", 
-    .info  = tas5825m_vol_info, 
+static const struct snd_kcontrol_new tas5825m_vol_control =
+{
+    .iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+    .name  = "Master Playback Volume",
+    .info  = tas5825m_vol_info,
     .get   = tas5825m_vol_locked_get,
-    .put   = tas5825m_vol_locked_put, 
+    .put   = tas5825m_vol_locked_put,
 };
 
 static int tas5825m_snd_probe(struct snd_soc_component *component)
 {
     int ret;
-        
+
     ret = snd_soc_add_component_controls(component, &tas5825m_vol_control, 1);
 
     return ret;
@@ -339,26 +332,26 @@ static struct snd_soc_component_driver soc_component_tas5825m = {
     .probe = tas5825m_snd_probe,
 };
 
-static int tas5825m_mute(struct snd_soc_dai *dai, int mute)
+static int tas5825m_mute_stream(struct snd_soc_dai *dai, int mute, int direction)
 {
     u8 reg03_value = 0;
     u8 reg35_value = 0;
     struct snd_soc_component *component = dai->component;
-    
+
     if (mute)
     {
         reg03_value = 0x0b;
-        reg35_value = 0x00;  
+        reg35_value = 0x00;
     }
     else
     {
         reg03_value = 0x03;
-        reg35_value = 0x11; 
-    }   
-    
+        reg35_value = 0x11;
+    }
+
     snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
     snd_soc_component_write(component, TAS5825M_REG_7F, TAS5825M_BOOK_00);
-    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);    
+    snd_soc_component_write(component, TAS5825M_REG_00, TAS5825M_PAGE_00);
     snd_soc_component_write(component, TAS5825M_REG_03, reg03_value);
     snd_soc_component_write(component, TAS5825M_REG_35, reg35_value);
 
@@ -366,7 +359,8 @@ static int tas5825m_mute(struct snd_soc_dai *dai, int mute)
 }
 
 static const struct snd_soc_dai_ops tas5825m_dai_ops = {
-    .digital_mute = tas5825m_mute,
+    .mute_stream = tas5825m_mute_stream,
+    .no_capture_mute = 1,
 };
 
 static struct snd_soc_dai_driver tas5825m_dai = {
@@ -385,17 +379,17 @@ static int tas5825m_probe(struct device *dev, struct regmap *regmap)
 {
     struct tas5825m_priv *tas5825m;
     int ret;
-    
+
     tas5825m = devm_kzalloc(dev, sizeof(struct tas5825m_priv), GFP_KERNEL);
     if (!tas5825m)
         return -ENOMEM;
-    
+
     dev_set_drvdata(dev, tas5825m);
     tas5825m->regmap = regmap;
     tas5825m->vol    = 100;         //100, -10dB
-    
+
     mutex_init(&tas5825m->lock);
-        
+
     ret = regmap_register_patch(regmap, tas5825m_init_sequence, ARRAY_SIZE(tas5825m_init_sequence));
     if (ret != 0)
     {
@@ -404,28 +398,28 @@ static int tas5825m_probe(struct device *dev, struct regmap *regmap)
 
     }
 
-    ret = devm_snd_soc_register_component(dev, 
+    ret = devm_snd_soc_register_component(dev,
                                  &soc_component_tas5825m,
-                                 &tas5825m_dai, 
+                                 &tas5825m_dai,
                                  1);
-    if (ret != 0) 
+    if (ret != 0)
     {
         dev_err(dev, "Failed to register CODEC: %d\n", ret);
         goto err;
     }
 
     return 0;
-    
+
 err:
     return ret;
 
 }
 
 static int tas5825m_i2c_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-{   
+{
     struct regmap *regmap;
     struct regmap_config config = tas5825m_regmap;
-    
+
     regmap = devm_regmap_init_i2c(i2c, &config);
     if (IS_ERR(regmap))
         return PTR_ERR(regmap);
@@ -434,16 +428,16 @@ static int tas5825m_i2c_probe(struct i2c_client *i2c, const struct i2c_device_id
 }
 
 static int tas5825m_remove(struct device *dev)
-{   
+{
     snd_soc_unregister_component(dev);
-    
+
     return 0;
 }
 
 static int tas5825m_i2c_remove(struct i2c_client *i2c)
-{   
+{
     tas5825m_remove(&i2c->dev);
-    
+
     return 0;
 }
 
@@ -473,6 +467,7 @@ static struct i2c_driver tas5825m_i2c_driver = {
 
 module_i2c_driver(tas5825m_i2c_driver);
 
+MODULE_AUTHOR("Andy Liu <andy-liu@ti.com>");
 MODULE_AUTHOR("Dario Murgia <dario.murgia@alumni.uniroma2.eu>");
 MODULE_DESCRIPTION("TAS5825M Audio Amplifier Driver");
 MODULE_LICENSE("GPL v2");

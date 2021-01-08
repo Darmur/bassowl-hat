@@ -1,20 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-only
 /*
  * Driver for the TAS5825M Audio Amplifier
  *
  * Author: Andy Liu <andy-liu@ti.com>
- * Update & Tuning: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
+ * Author: Dario Murgia <dario.murgia@alumni.uniroma2.eu>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
  */
- 
- #include <linux/regmap.h>
+
+#include <linux/regmap.h>
 
 static const struct reg_sequence tas5825m_init_sequence[] =
 {
@@ -46,9 +39,9 @@ static const struct reg_sequence tas5825m_init_sequence[] =
 //	{ 0x54, 0x05 }, // Analog gain -2.5dB (22.12 Vpeak)
 //	{ 0x54, 0x06 }, // Analog gain -3.0dB (20.89 Vpeak)
 //	{ 0x54, 0x07 }, // Analog gain -3.5dB (19.73 Vpeak)
-//	{ 0x54, 0x08 }, // Analog gain -4.0dB (18.61 Vpeak)
+	{ 0x54, 0x08 }, // Analog gain -4.0dB (18.61 Vpeak)
 //	{ 0x54, 0x09 }, // Analog gain -4.5dB (17.57 Vpeak)
-	{ 0x54, 0x0a }, // Analog gain -5.0dB (16.59 Vpeak)
+//	{ 0x54, 0x0a }, // Analog gain -5.0dB (16.59 Vpeak)
 //	{ 0x54, 0x0b }, // Analog gain -5.5dB (15.66 Vpeak)
 //	{ 0x54, 0x0c }, // Analog gain -6.0dB (14.79 Vpeak)
 //	{ 0x54, 0x0d }, // Analog gain -6.5dB (13.96 Vpeak)
