@@ -1,18 +1,18 @@
 diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
-index fa6db6eed..c405cb303 100644
+index d2e66ab..12d2edc 100644
 --- a/arch/arm/boot/dts/overlays/Makefile
 +++ b/arch/arm/boot/dts/overlays/Makefile
-@@ -27,6 +27,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
+@@ -25,6 +25,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
  	audioinjector-wm8731-audio.dtbo \
  	audiosense-pi.dtbo \
  	audremap.dtbo \
 +	bassowl.dtbo \
  	balena-fin.dtbo \
- 	cma.dtbo \
+ 	bmp085_i2c-sensor.dtbo \
  	dht11.dtbo \
 diff --git a/arch/arm/boot/dts/overlays/bassowl-overlay.dts b/arch/arm/boot/dts/overlays/bassowl-overlay.dts
-new file mode 100644
-index 000000000..74049b973
+new file mode 100755
+index 0000000..74049b9
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/bassowl-overlay.dts
 @@ -0,0 +1,53 @@
@@ -70,46 +70,46 @@ index 000000000..74049b973
 +  };
 +};
 diff --git a/arch/arm/configs/bcm2709_defconfig b/arch/arm/configs/bcm2709_defconfig
-index 77feb47ce..e0739054c 100644
+index 4fd6bcc..8582626 100644
 --- a/arch/arm/configs/bcm2709_defconfig
 +++ b/arch/arm/configs/bcm2709_defconfig
-@@ -1006,6 +1006,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -1016,6 +1016,7 @@ CONFIG_SND_SOC_CS4265=m
+ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
- CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
 +CONFIG_SND_SOC_TAS5825M=m
  CONFIG_SND_SOC_WM8804_I2C=m
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/arch/arm/configs/bcm2711_defconfig b/arch/arm/configs/bcm2711_defconfig
-index 95934186b..6f5845738 100644
+index 4d3edba..9c5bc6a 100644
 --- a/arch/arm/configs/bcm2711_defconfig
 +++ b/arch/arm/configs/bcm2711_defconfig
-@@ -1022,6 +1022,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -1030,6 +1030,7 @@ CONFIG_SND_SOC_CS4265=m
+ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
- CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
 +CONFIG_SND_SOC_TAS5825M=m
  CONFIG_SND_SOC_WM8804_I2C=m
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/arch/arm/configs/bcmrpi_defconfig b/arch/arm/configs/bcmrpi_defconfig
-index bf6e9ba08..6f8df4e48 100644
+index 65b0a03..87cbf1c 100644
 --- a/arch/arm/configs/bcmrpi_defconfig
 +++ b/arch/arm/configs/bcmrpi_defconfig
-@@ -994,6 +994,7 @@ CONFIG_SND_SOC_ICS43432=m
+@@ -1008,6 +1008,7 @@ CONFIG_SND_SOC_CS4265=m
+ CONFIG_SND_SOC_ICS43432=m
  CONFIG_SND_SOC_MA120X0P=m
- CONFIG_SND_SOC_MAX98357A=m
  CONFIG_SND_SOC_SPDIF=m
 +CONFIG_SND_SOC_TAS5825M=m
  CONFIG_SND_SOC_WM8804_I2C=m
  CONFIG_SND_SIMPLE_CARD=m
  CONFIG_HID_BATTERY_STRENGTH=y
 diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index c4160609a..4ba502894 100644
+index d668154..be6c648 100644
 --- a/sound/soc/codecs/Kconfig
 +++ b/sound/soc/codecs/Kconfig
-@@ -185,6 +185,7 @@ config SND_SOC_ALL_CODECS
+@@ -164,6 +164,7 @@ config SND_SOC_ALL_CODECS
  	select SND_SOC_TAS5086 if I2C
  	select SND_SOC_TAS571X if I2C
  	select SND_SOC_TAS5720 if I2C
@@ -117,7 +117,7 @@ index c4160609a..4ba502894 100644
  	select SND_SOC_TAS6424 if I2C
  	select SND_SOC_TDA7419 if I2C
  	select SND_SOC_TFA9879 if I2C
-@@ -1137,6 +1138,13 @@ config SND_SOC_TAS5720
+@@ -991,6 +992,13 @@ config SND_SOC_TAS5720
  	  Enable support for Texas Instruments TAS5720L/M high-efficiency mono
  	  Class-D audio power amplifiers.
  
@@ -132,10 +132,10 @@ index c4160609a..4ba502894 100644
  	tristate "Texas Instruments TAS6424 Quad-Channel Audio amplifier"
  	depends on I2C
 diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index 02560ad53..28c2a7548 100644
+index ed1073e..5cdc7ab 100644
 --- a/sound/soc/codecs/Makefile
 +++ b/sound/soc/codecs/Makefile
-@@ -201,6 +201,7 @@ snd-soc-tas6424-objs := tas6424.o
+@@ -179,6 +179,7 @@ snd-soc-tas6424-objs := tas6424.o
  snd-soc-tda7419-objs := tda7419.o
  snd-soc-tfa9879-objs := tfa9879.o
  snd-soc-tas5713-objs := tas5713.o
@@ -143,7 +143,7 @@ index 02560ad53..28c2a7548 100644
  snd-soc-tlv320aic23-objs := tlv320aic23.o
  snd-soc-tlv320aic23-i2c-objs := tlv320aic23-i2c.o
  snd-soc-tlv320aic23-spi-objs := tlv320aic23-spi.o
-@@ -488,6 +489,7 @@ obj-$(CONFIG_SND_SOC_TAS6424)	+= snd-soc-tas6424.o
+@@ -442,6 +443,7 @@ obj-$(CONFIG_SND_SOC_TAS6424)	+= snd-soc-tas6424.o
  obj-$(CONFIG_SND_SOC_TDA7419)	+= snd-soc-tda7419.o
  obj-$(CONFIG_SND_SOC_TFA9879)	+= snd-soc-tfa9879.o
  obj-$(CONFIG_SND_SOC_TAS5713)	+= snd-soc-tas5713.o
@@ -153,7 +153,7 @@ index 02560ad53..28c2a7548 100644
  obj-$(CONFIG_SND_SOC_TLV320AIC23_SPI)	+= snd-soc-tlv320aic23-spi.o
 diff --git a/sound/soc/codecs/tas5825m.c b/sound/soc/codecs/tas5825m.c
 new file mode 100644
-index 000000000..a075abd05
+index 0000000..a075abd
 --- /dev/null
 +++ b/sound/soc/codecs/tas5825m.c
 @@ -0,0 +1,472 @@
@@ -631,7 +631,7 @@ index 000000000..a075abd05
 +MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/codecs/tas5825m.h b/sound/soc/codecs/tas5825m.h
 new file mode 100644
-index 000000000..743036d7c
+index 0000000..a7c72c1
 --- /dev/null
 +++ b/sound/soc/codecs/tas5825m.h
 @@ -0,0 +1,1717 @@
