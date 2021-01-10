@@ -1,33 +1,42 @@
 #!/bin/bash
 
 CPU=2
+KERNEL_VERSION="4.19.118"
 
-KERNEL_VERSION=5.10.3
-VOLUMIO_HASH=da59cb1161dc7c75727ec5c7636f632c52170961
-PATCH=bassowl-5.10.x.patch
+case $KERNEL_VERSION in
+    "5.10.3")
+      KERNEL_COMMIT="da59cb1161dc7c75727ec5c7636f632c52170961"
+      PATCH="bassowl-5.10.x.patch"
+      ;;
+    "5.4.79")
+      KERNEL_COMMIT="0642816ed05d31fb37fc8fbbba9e1774b475113f"
+      PATCH="bassowl-5.4.x.patch"
+      ;;
+    "5.4.72")
+      KERNEL_COMMIT="b3b238cf1e64d0cc272732e77ae6002c75184495"
+      PATCH="bassowl-5.4.x.patch"
+      ;;
+    "5.4.59")
+      KERNEL_COMMIT="caf7070cd6cece7e810e6f2661fc65899c58e297"
+      PATCH="bassowl-5.4.x.patch"
+      ;;
+    "5.4.51")
+      KERNEL_COMMIT="8382ece2b30be0beb87cac7f3b36824f194d01e9"
+      PATCH="bassowl-5.4.x.patch"
+      ;;
+    "4.19.118")
+      KERNEL_COMMIT="e1050e94821a70b2e4c72b318d6c6c968552e9a2"
+      PATCH="bassowl-4.19.x.patch"
+      ;;
+    "4.14.92")
+      KERNEL_COMMIT="6aec73ed5547e09bea3e20aa2803343872c254b6"
+      PATCH="bassowl-4.14.x.patch"
+      ;;
+esac
 
-#KERNEL_VERSION=5.4.79
-#VOLUMIO_HASH=0642816ed05d31fb37fc8fbbba9e1774b475113f
-#PATCH=bassowl-5.4.x.patch
+echo "!!!  Build modules for kernel ${KERNEL_VERSION}  !!!"
 
-#KERNEL_VERSION=5.4.72
-#VOLUMIO_HASH=b3b238cf1e64d0cc272732e77ae6002c75184495
-#PATCH=bassowl-5.4.x.patch
-
-#KERNEL_VERSION=5.4.59
-#VOLUMIO_HASH=caf7070cd6cece7e810e6f2661fc65899c58e297
-#PATCH=bassowl-5.4.x.patch
-
-#KERNEL_VERSION=5.4.51
-#VOLUMIO_HASH=8382ece2b30be0beb87cac7f3b36824f194d01e9
-#PATCH=bassowl-5.4.x.patch
-
-#KERNEL_VERSION=4.19.118
-#VOLUMIO_HASH=e1050e94821a70b2e4c72b318d6c6c968552e9a2
-#PATCH=bassowl-4.19.x.patch
-
-
-echo "!!! Build RPi0 kernel and modules !!!"
+echo "!!!  Build RPi0 kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}+/
 KERNEL=kernel
 make -j${CPU} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
