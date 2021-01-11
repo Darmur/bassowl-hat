@@ -1,0 +1,1 @@
+ef7230353a37e729bd625066212ed0a305444bba  modules-rpi-4.14.92-bassowl.tar.gz
