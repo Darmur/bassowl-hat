@@ -64,6 +64,7 @@ echo "!!!  RPi4 build done  !!!"
 echo "-------------------------"
 
 echo "!!!  Creating archive  !!!"
+rm -rf modules-rpi-${KERNEL_VERSION}-bassowl/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/boot/overlays
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}+/kernel/sound/soc/codecs/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7+/kernel/sound/soc/codecs/

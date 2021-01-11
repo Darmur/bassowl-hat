@@ -49,9 +49,10 @@ wget -N https://raw.githubusercontent.com/Darmur/bassowl-hat/master/driver/patch
 echo "!!!  Extract kernel source  !!!"
 rm -rf linux-${KERNEL_VERSION}+/
 tar xvzf ${GIT_HASH}.tar.gz
+rm ${GIT_HASH}.tar.gz
 mv linux-${GIT_HASH}/ linux-${KERNEL_VERSION}+/
 
-echo "!!! Create git repo and apply patch  !!!"
+echo "!!!  Create git repo and apply patch  !!!"
 cd linux-${KERNEL_VERSION}+/
 git init
 git add --all
@@ -61,7 +62,9 @@ git apply ${PATCH}
 git status
 cd ..
 
-echo "!!! Copy source files for other variants  !!!"
+echo "!!!  Copy source files for other variants  !!!"
+rm -rf linux-${KERNEL_VERSION}-v7+/
+rm -rf linux-${KERNEL_VERSION}-v7l+/
 cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v7+/
 cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v7l+/
 
@@ -93,6 +96,7 @@ echo "!!!  RPi4 build done  !!!"
 echo "-------------------------"
 
 echo "!!!  Creating archive  !!!"
+rm -rf modules-rpi-${KERNEL_VERSION}-bassowl/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/boot/overlays
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}+/kernel/sound/soc/codecs/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7+/kernel/sound/soc/codecs/
