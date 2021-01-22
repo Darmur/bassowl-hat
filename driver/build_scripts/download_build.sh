@@ -1,12 +1,20 @@
 #!/bin/bash
 
 CPU=2
-KERNEL_VERSION="4.19.118"
+KERNEL_VERSION="5.4.83"
 
 case $KERNEL_VERSION in
     "5.10.3")
       KERNEL_COMMIT="da59cb1161dc7c75727ec5c7636f632c52170961"
       PATCH="bassowl-5.10.x.patch"
+      ;;
+    "5.4.83")
+      KERNEL_COMMIT="b7c8ef64ea24435519f05c38a2238658908c038e"
+      PATCH="bassowl-5.4.x.patch"
+      ;;
+    "5.4.81")
+      KERNEL_COMMIT="453e49bdd87325369b462b40e809d5f3187df21d"
+      PATCH="bassowl-5.4.x.patch"
       ;;
     "5.4.79")
       KERNEL_COMMIT="0642816ed05d31fb37fc8fbbba9e1774b475113f"
