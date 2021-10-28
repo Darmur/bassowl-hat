@@ -1,0 +1,1 @@
+c2971cd336468fdb4ea192ef137d315f1b56b953  modules-rpi-5.10.73-bassowl.tar.gz
