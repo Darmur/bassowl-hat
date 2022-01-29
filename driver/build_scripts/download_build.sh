@@ -1,9 +1,13 @@
 #!/bin/bash
 
 CPU=4
-KERNEL_VERSION="5.10.73"
+KERNEL_VERSION="5.10.90"
 
 case $KERNEL_VERSION in
+    "5.10.90")
+      KERNEL_COMMIT="9a09c1dcd4fae55422085ab6a87cc650e68c4181"
+      PATCH="bassowl-5.10.y.patch"
+      ;;
     "5.10.73")
       KERNEL_COMMIT="1597995e94e7ba3cd8866d249e6df1cf9a790e49"
       PATCH="bassowl-5.10.y.patch"
@@ -52,7 +56,7 @@ esac
 
 echo "!!!  Build modules for kernel ${KERNEL_VERSION}  !!!"
 echo "!!!  Download kernel hash info  !!!"
-wget -N https://raw.githubusercontent.com/Hexxeh/rpi-firmware/${KERNEL_COMMIT}/git_hash
+wget -N https://raw.githubusercontent.com/raspberrypi/rpi-firmware/${KERNEL_COMMIT}/git_hash
 GIT_HASH="$(cat git_hash)"
 rm git_hash
 
