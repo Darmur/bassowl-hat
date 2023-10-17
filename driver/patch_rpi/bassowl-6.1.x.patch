@@ -105,6 +105,30 @@ index 95abac6e1..6d3e90826 100644
  CONFIG_SND_SOC_TLV320AIC23_I2C=m
  CONFIG_SND_SOC_WM8804_I2C=m
  CONFIG_SND_SOC_WM8960=m
+diff --git a/arch/arm64/configs/bcm2711_defconfig b/arch/arm64/configs/bcm2711_defconfig
+index 99313f8c9..25b12f0e8 100644
+--- a/arch/arm64/configs/bcm2711_defconfig
++++ b/arch/arm64/configs/bcm2711_defconfig
+@@ -1116,6 +1116,7 @@ CONFIG_SND_SOC_ICS43432=m
+ CONFIG_SND_SOC_MA120X0P=m
+ CONFIG_SND_SOC_MAX98357A=m
+ CONFIG_SND_SOC_SPDIF=m
++CONFIG_SND_SOC_TAS5825M=m
+ CONFIG_SND_SOC_TLV320AIC23_I2C=m
+ CONFIG_SND_SOC_WM8804_I2C=m
+ CONFIG_SND_SOC_WM8960=m
+diff --git a/arch/arm64/configs/bcm2712_defconfig b/arch/arm64/configs/bcm2712_defconfig
+index 8ad2775f5..e1d6d4cd1 100644
+--- a/arch/arm64/configs/bcm2712_defconfig
++++ b/arch/arm64/configs/bcm2712_defconfig
+@@ -1119,6 +1119,7 @@ CONFIG_SND_SOC_ICS43432=m
+ CONFIG_SND_SOC_MA120X0P=m
+ CONFIG_SND_SOC_MAX98357A=m
+ CONFIG_SND_SOC_SPDIF=m
++CONFIG_SND_SOC_TAS5825M=m
+ CONFIG_SND_SOC_TLV320AIC23_I2C=m
+ CONFIG_SND_SOC_WM8804_I2C=m
+ CONFIG_SND_SOC_WM8960=m
 diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
 index 800ba3c06..3da3155ab 100644
 --- a/sound/soc/codecs/Kconfig
