@@ -1,1 +1,1 @@
-12762c4c8112dbf154677e8205ebdc07cea79c38  modules-rpi-6.1.57-bassowl.tar.gz
+3930f3a19d002d9f8b9dfef1eb903ef0153483a2  modules-rpi-6.1.57-bassowl.tar.gz
