@@ -1,9 +1,13 @@
 #!/bin/bash
 
 CPU=4
-KERNEL_VERSION="6.1.58"
+KERNEL_VERSION="6.1.61"
 
 case $KERNEL_VERSION in
+    "6.1.61")
+      KERNEL_COMMIT="d1ba55dafdbd33cfb938bca7ec325aafc1190596"
+      PATCH="bassowl-6.1.x.patch"
+      ;;
     "6.1.58")
       KERNEL_COMMIT="7b859959a6642aff44acdfd957d6d66f6756021e"
       PATCH="bassowl-6.1.x.patch"
@@ -77,40 +81,40 @@ cd ..
 echo "!!!  RPi0 build done  !!!"
 echo "-------------------------"
 
-echo "!!!  Build RPi3 kernel and modules  !!!"
+echo "!!!  Build RPi2 kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}-v7+/
 KERNEL=kernel7
 make -j${CPU} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
 make -j${CPU} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 cd ..
-echo "!!!  RPi3 build done  !!!"
+echo "!!!  RPi2 build done  !!!"
 echo "-------------------------"
 
-echo "!!!  Build RPi4 kernel and modules  !!!"
+echo "!!!  Build RPi3/4 32-bit kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}-v7l+/
 KERNEL=kernel7l
 make -j${CPU} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2711_defconfig
 make -j${CPU} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 cd ..
-echo "!!!  RPi4 build done  !!!"
+echo "!!!  RPi3/4 build 32-bit done  !!!"
 echo "-------------------------"
 
-echo "!!!  Build RPi4 arm64 kernel and modules  !!!"
+echo "!!!  Build RPi3/4/5 64-bit kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}-v8+/
 KERNEL=kernel8
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 cd ..
-echo "!!!  RPi4 arm64 build done  !!!"
+echo "!!!  RPi3/4/5 64-bit build done  !!!"
 echo "-------------------------"
 
-echo "!!!  Build RPi5 arm64 kernel and modules  !!!"
+echo "!!!  Build RPi5 64-bit kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}-v8_16k+/
 KERNEL=kernel_2712
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2712_defconfig
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 cd ..
-echo "!!!  RPi5 arm64 build done  !!!"
+echo "!!!  RPi5 64-bit build done  !!!"
 echo "-------------------------"
 
 echo "!!!  Creating archive  !!!"
