@@ -89,7 +89,7 @@ cd linux-${KERNEL_VERSION}+/
 git init
 git add --all
 git commit -m "extracted files"
-cp ../${PATCH} ${PATCH}
+mv ../${PATCH} ${PATCH}
 git apply ${PATCH}
 git status
 cd ..
@@ -164,5 +164,6 @@ cp linux-${KERNEL_VERSION}-v8_16k+/sound/soc/codecs/snd-soc-tas5825m.ko modules-
 tar -czvf modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz modules-rpi-${KERNEL_VERSION}-bassowl/ --owner=0 --group=0
 md5sum modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz > modules-rpi-${KERNEL_VERSION}-bassowl.md5sum.txt
 sha1sum modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz > modules-rpi-${KERNEL_VERSION}-bassowl.sha1sum.txt
+rm -rf modules-rpi-${KERNEL_VERSION}-bassowl/
 
 echo "!!!  Done  !!!"
