@@ -1,11 +1,15 @@
 #!/bin/bash
 
 CPU=4
-KERNEL_VERSION="6.1.70"
+KERNEL_VERSION="6.1.69"
 
 case $KERNEL_VERSION in
     "6.1.70")
       KERNEL_COMMIT="fc9319fda550a86dc6c23c12adda54a0f8163f22"
+      PATCH="bassowl-6.1.x.patch"
+      ;;
+    "6.1.69")
+      KERNEL_COMMIT="ec8e8136d773de83e313aaf983e664079cce2815"
       PATCH="bassowl-6.1.x.patch"
       ;;
     "6.1.64")
