@@ -29,7 +29,7 @@ grep -q "dtparam=i2s=on" /boot/config.txt || \
 raspi-config nonint do_i2c 0
 
 apt update
-apt -y install python-smbus
+apt -y install python-smbus || apt -y install python3-smbus
 
 
 # ALSA settings
