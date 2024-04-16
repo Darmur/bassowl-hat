@@ -1,9 +1,13 @@
 #!/bin/bash
 
 CPU=4
-KERNEL_VERSION="6.1.69"
+KERNEL_VERSION="6.1.77"
 
 case $KERNEL_VERSION in
+    "6.1.77")
+      KERNEL_COMMIT="5fc4f643d2e9c5aa972828705a902d184527ae3f"
+      PATCH="bassowl-6.1.x.patch"
+      ;;
     "6.1.70")
       KERNEL_COMMIT="fc9319fda550a86dc6c23c12adda54a0f8163f22"
       PATCH="bassowl-6.1.x.patch"
@@ -112,7 +116,7 @@ rm -rf linux-${KERNEL_VERSION}-v7l+/
 cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v7+/
 cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v7l+/
 cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v8+/
-cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v8_16k+/
+cp -r linux-${KERNEL_VERSION}+/ linux-${KERNEL_VERSION}-v8-16k+/
 
 echo "!!!  Build RPi0 kernel and modules  !!!"
 cd linux-${KERNEL_VERSION}+/
@@ -151,7 +155,7 @@ echo "!!!  RPi3/4/5 64-bit build done  !!!"
 echo "-------------------------"
 
 echo "!!!  Build RPi5 64-bit kernel and modules  !!!"
-cd linux-${KERNEL_VERSION}-v8_16k+/
+cd linux-${KERNEL_VERSION}-v8-16k+/
 KERNEL=kernel_2712
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2712_defconfig
 make -j${CPU} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
@@ -166,13 +170,13 @@ mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}+/ke
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7+/kernel/sound/soc/codecs/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7l+/kernel/sound/soc/codecs/
 mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8+/kernel/sound/soc/codecs/
-mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8_16k+/kernel/sound/soc/codecs/
+mkdir -p modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8-16k+/kernel/sound/soc/codecs/
 cp linux-${KERNEL_VERSION}+/arch/arm/boot/dts/overlays/bassowl.dtbo modules-rpi-${KERNEL_VERSION}-bassowl/boot/overlays
 cp linux-${KERNEL_VERSION}+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl//lib/modules/${KERNEL_VERSION}+/kernel/sound/soc/codecs/
 cp linux-${KERNEL_VERSION}-v7+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7+/kernel/sound/soc/codecs/
 cp linux-${KERNEL_VERSION}-v7l+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v7l+/kernel/sound/soc/codecs/
 cp linux-${KERNEL_VERSION}-v8+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8+/kernel/sound/soc/codecs/
-cp linux-${KERNEL_VERSION}-v8_16k+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8_16k+/kernel/sound/soc/codecs/
+cp linux-${KERNEL_VERSION}-v8-16k+/sound/soc/codecs/snd-soc-tas5825m.ko modules-rpi-${KERNEL_VERSION}-bassowl/lib/modules/${KERNEL_VERSION}-v8-16k+/kernel/sound/soc/codecs/
 tar -czvf modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz modules-rpi-${KERNEL_VERSION}-bassowl/ --owner=0 --group=0
 md5sum modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz > modules-rpi-${KERNEL_VERSION}-bassowl.md5sum.txt
 sha1sum modules-rpi-${KERNEL_VERSION}-bassowl.tar.gz > modules-rpi-${KERNEL_VERSION}-bassowl.sha1sum.txt
